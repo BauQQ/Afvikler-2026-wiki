@@ -1,6 +1,6 @@
-## Welcome to Afvikler Documentation
+## Velkommen til Afvikler Dokumentation
 
 Text
 
-## Manuals
-[All manuals](https://bauqq.github.io/Afvikler-2026-wiki/manuals/)
+## Manualer
+[Alle manualer](https://bauqq.github.io/Afvikler-2026-wiki/manuals/)
