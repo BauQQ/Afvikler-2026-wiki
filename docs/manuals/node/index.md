@@ -197,7 +197,7 @@ Controller.LoadPlaylist("playlist.json", 0)
 Controller.UpdatePlaylist(101, 2, "18:30:00", "0")
 ```
 
-### AddTo_playlist(itemId, categoryId, timestamp, token)
+### Controller.AddToPlaylist(itemId, categoryId, timestamp, token)
 
 **AddToPlaylist** benyttes ved Drag & Drop fra biblioteket ind i playlisten.
 
@@ -213,7 +213,7 @@ Controller.UpdatePlaylist(101, 2, "18:30:00", "0")
 Controller.AddToPlaylist(202, 2, "18:45:00", "0")
 ```
 
-### RemoveFrom_playlist(itemId, categoryId, timestamp, token)
+### Controller.RemoveFromPlaylist(itemId, categoryId, timestamp, token)
 
 **RemoveFromPlaylist** fjerner et element fra playlist og opdaterer serverens status
 
