@@ -7,3 +7,5 @@
 [Node](https://bauqq.github.io/Afvikler-2026-wiki/node)
 
 [Postgres](https://bauqq.github.io/Afvikler-2026-wiki/postgres)
+
+[Media Management](https://bauqq.github.io/Afvikler-2026-wiki/mediaManagement)
