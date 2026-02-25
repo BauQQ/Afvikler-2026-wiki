@@ -114,3 +114,28 @@ Alle kommandoer returnerer en statuskode, der bekræfter om handlingen lykkedes:
 <br />
 **500 ERROR**. Der opstod en fejl på serveren (Tjek log)
 
+## System & Administration
+
+#### Command.Capabilities()
+**Capabilities** henter en liste over hardwarens og serverens understøttede formater og funktioner.
+
+**Anvendelse**. Bruges ved app-opstart til dynamisk at konfigurere interfacet (f.eks. ved at deaktivere 4K-knapper, hvis hardwaren ikke understøtter det)
+
+**Eksempel**
+```
+>> Command.Capabilities()
+<< 200 OK
+<< [FORMATS: 1080i500, 1080p250] [CONSUMERS: DECKLINK, SCREEN]
+```
+
+#### Command.Restart()
+**Restart** Tvinger CasparCG-serveren til en fuld genstart
+
+> **Bemærk** Hard Reset. Denne kommando afbryder alle aktive signlaer og tømmer hukommelsen.
+
+**Eksempel**
+```
+>> Command.Restart()
+<< 202 RESTARTING
+```
+
