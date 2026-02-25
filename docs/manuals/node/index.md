@@ -1,3 +1,4 @@
+[← Tilbage til forsiden](../../) | [CasparCG](../casparcg/) | [Media](../mediaManagement/) | [Postgres](../postgres/) | [Blackmagic](../blackmagic/)
 ## CasparCG Controller Kommandoer
 
 `Play, Stop, Clear, Resume, Pause, Info`

@@ -1,3 +1,4 @@
+[← Tilbage til forsiden](../../) | [CasparCG](../casparcg/) | [Media](../mediaManagement/)| [Node](../node/) | [Blackmagic](../blackmagic/)
 ### Postgres Kommandoer
 
 ### Reset DB

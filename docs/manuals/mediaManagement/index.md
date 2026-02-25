@@ -1,3 +1,4 @@
+[← Tilbage til forsiden](../../) | [CasparCG](../casparcg/) | [Postgres](../postgres/) | [Node](../node/) | [Blackmagic](../blackmagic/)
 ## Media Management
 
 #### Media.Upload(filename)
@@ -21,8 +22,8 @@ Media.Upload("INTRO_V2.mp4")
 | :------------ | :--------: | :------------ |
 |   `filename`   |   `string`   |   **Required**. Navnet på filen inkl filendelse  |
 
-> [!WARNING]
-> Dette er en destruktiv handling. Det anbefales at implementere en "Er du sikker" dialog i UI'et
+**Bemærk**
+Dette er en destruktiv handling. Det anbefales at implementere en "Er du sikker" dialog i UI'et
 
 **Eksempel**
 ```
@@ -54,7 +55,7 @@ Media.Move("incoming/clip.mp4", "archive/clip.mp4");
 
 **Eksempel**
 ```
->>Media.List()
+>> Media.List()
 << Returnerer: ["video1.mp4", "logo.png", "folder/clip.mov"]
 ```
 

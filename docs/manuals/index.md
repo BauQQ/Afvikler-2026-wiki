@@ -1,3 +1,4 @@
+[← Tilbage til forsiden](../../)
 ## Alle Manualer
 
 [CasparCG](https://bauqq.github.io/Afvikler-2026-wiki/manuals/casparcg)
