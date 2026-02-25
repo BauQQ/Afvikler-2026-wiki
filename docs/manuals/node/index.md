@@ -84,13 +84,14 @@ Systemet er designet til at være fejl tolerant.
 
 **Logik**: Hvis serveren ikke svare på ``Hello``, skal klienten afbryde forbindelsen og forsøge genopretning.
 
-#### Auth.Identify(clientType, version)
+#### Auth.Identify(clientType, version, token)
 **Identify** udveksler information om klientens identitet og version
 
 |   Parametre   |   Type    |   Beskrivelse |
 | :------------ | :--------: | :------------ |
 |   `clientType`   |   `string`   |   **Required**. Typen af klient (f.eks. "Admin" eller "Monitor")  |
 | `version`    |   `string`   |   **Required**. Klientens nuværende versionnummer   |
+|   `token`   |   `string`   |   **Required**. Validerings token (0 for standard) |
 
 **Eksempel**
 ```
@@ -110,9 +111,13 @@ Auth.Identify("Admin-control", "1.0.2");
 Auth.Login("admin@test.com", "p@ssword123");
 ```
 
-#### Auth.Logout();
+#### Auth.Logout(token);
+
 **Logout** afslutter sessionen og frigiver ressourcer.
 
+|   Parameter   |   Type    |   Description |
+| :------------ | :--------: | :------------ |
+|   `token`   |   `string`   |   **Required**. Validerings token (0 for standard) |
 
 ### Responses
 
@@ -160,13 +165,21 @@ Auth.Login("admin@test.com", "p@ssword123");
 Controller.LoadPlaylist("playlist.json", 0)
 ```
 
-### Controller.StartPlaylist()
+### Controller.StartPlaylist(token)
 
 **StartPlaylist** aktiverer afviklingen af den nuværende kø. Den trigger det første element og starter de nødvendige outputs på CasparCG og Blackmagic hardwaren.
 
-### Controller.StopPlaylist()
+|   Parameter   |   Type    |   Description |
+| :------------ | :--------: | :------------ |
+|   `token`   |   `string`   |   **Required**. Validerings token (0 for standard) |
+
+### Controller.StopPlaylist(token)
 
 **StopPlaylist** afbryder al afvikling øjeblikkeligt. Den rydder hele afviklings-køen og fungerer som en "Panic Button", der bringer alle lag i sort eller til default state.
+
+|   Parameter   |   Type    |   Description |
+| :------------ | :--------: | :------------ |
+|   `token`   |   `string`   |   **Required**. Validerings token (0 for standard) |
 
 ### Controller.UpdatePlaylist(itemId, categoryId, timestamp, token)
 
