@@ -1,6 +1,6 @@
 ## Velkommen til Afvikler Dokumentation
 
-Text
+DanmarkC TV Afvikler 2026 - I samarbejde med 2 møjunger og Kasper
 
-## Manualer
+## Links
 [Alle manualer](https://bauqq.github.io/Afvikler-2026-wiki/manuals/)
