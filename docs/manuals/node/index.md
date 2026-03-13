@@ -276,3 +276,146 @@ Controller.Seek(0, 10, "seconds");
 << Reponse: 200 OK ["FILE": "CLIP_A.mp4", "FRAME": 150, "TOTAL": 1000]
 ```
 > Token eller 0 på alle vores interne kommandoer
+
+## System Internals
+
+### Logger
+
+Systemets interne logger skriver til konsollen og til en logfil på disk.
+
+#### Konfiguration
+Logger skal konfigureres én gang ved opstart:
+```javascript
+Logger.configure({ logFile: "path/to/server.log" });
+```
+
+#### Log-niveauer
+
+| Metode | Beskrivelse |
+| :--- | :--- |
+| `Logger.info(message)` | Generel information |
+| `Logger.warning(message)` | Advarsler |
+| `Logger.error(message)` | Fejl |
+
+**Timestamps** formateres i `Europe/Copenhagen` timezone som `YYYY-MM-DDTHH:mm:ss.SSS`.
+
+#### Log-rotation
+Logfiler roteres automatisk ved midnat. Den gamle fil omdøbes med datoen (`server-2026-03-13.log`) og komprimeres til `.gz`. En ny tom logfil oprettes automatisk.
+
+---
+
+### Socket
+
+WebSocket-serveren kører over **WSS (WebSocket Secure)** og kræver SSL-certifikat konfigureret i `global.config.socket`.
+
+Alle beskeder komprimeres med **PAKO** (deflate/inflate). Se også [Compression](#compression-pako) sektionen.
+
+Hver klient tildeles et **unikt numerisk ID** ved forbindelse og registreres i `global.variables.clients`:
+```javascript
+{
+    socket: socket,
+    id: "12345",
+    page: null,
+    connectedAt: Date.now()
+}
+```
+
+---
+
+### Command Handler
+
+Command Handleren er den centrale router, der modtager beskeder fra klienter og videresender dem til det korrekte modul.
+
+#### Protokolformat
+
+Alle kommandoer sendes som **pipe-separerede strenge**:
+```
+KOMMANDO|DATA|TOKEN
+```
+
+For at kalde en specifik funktion i et modul:
+```
+KOMMANDO>FUNKTION|DATA|TOKEN
+```
+
+| Del | Beskrivelse |
+| :--- | :--- |
+| `KOMMANDO` | Navn på det modul der skal kaldes (f.eks. `auth`, `controller`) |
+| `>FUNKTION` | **Valgfri**. Specifik funktion i modulet. Default er `f` |
+| `DATA` | Data til kommandoen. Mellemste dele joinnes automatisk |
+| `TOKEN` | Valideringstoken. Brug `0` for standard |
+
+**Eksempel**
+```
+auth>login|admin@test.com|p@ssword123|0
+controller|Play|1|1|Nyheder|0
+```
+
+---
+
+### Cryptography
+
+| Metode | Beskrivelse |
+| :--- | :--- |
+| `generateID()` | Genererer et tilfældigt numerisk ID |
+| `passwordHash(password)` | Hasher en adgangskode med **SHA-256** |
+
+---
+
+### DB (PostgreSQL)
+
+Databaseforbindelsen bruger en **connection pool** via `pg`-biblioteket.
+
+Konfigureres via `global.config.database` eller miljøvariabler:
+
+| Miljøvariabel | Beskrivelse |
+| :--- | :--- |
+| `PGHOST` | Database host |
+| `PGPORT` | Port (default: `5432`) |
+| `PGUSER` | Brugernavn |
+| `PGPASSWORD` | Adgangskode |
+| `PGDATABASE` | Database navn |
+
+Standard max pool størrelse er **10 forbindelser**.
+
+**Eksempel**
+```javascript
+const result = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+```
+
+---
+
+### IO
+
+IO-klassen håndterer port-tjek og frigivelse ved opstart.
+
+| Metode | Beskrivelse |
+| :--- | :--- |
+| `IO.isPortFree(port)` | Returnerer `true` hvis porten er ledig |
+| `IO.freePort(port)` | Tjekker porten — forsøger automatisk at frigøre den hvis den er i brug |
+
+---
+
+### SPL (Module Loader)
+
+SPL indlæser automatisk alle moduler fra `modules/`-mappen rekursivt ved server-opstart.
+
+**Eksempel — find et modul**
+```javascript
+const loginModule = await spl.find("auth/login");
+```
+
+Moduler addresseres med **skråstreg-separeret sti** relativt til `modules/`-mappen.
+
+#### Server opstartrækkefølge
+
+Serveren starter i følgende rækkefølge:
+
+1. **Libs** — Eksterne biblioteker indlæses fra `global.config.libs` og registreres på `global.libs`
+2. **Logger** — Logfilen initialiseres og registreres som `global.Log`
+3. **Kernel** — Alle kernel-moduler indlæses parallelt og registreres som `global.[modulNavn]`
+4. **SPL** — Alle applikationsmoduler indlæses fra `modules/`-mappen
+5. **Port** — Den konfigurerede socket-port frigøres via `global.IO.freePort()`
+6. **Socket** — WebSocket-serveren bygges og starter med at lytte
+
+Hvis et trin fejler, afbrydes processen med `process.exit(1)`.
